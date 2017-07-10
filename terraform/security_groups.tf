@@ -1,9 +1,9 @@
 # Our default security group to access
 # the instances over SSH and HTTP
 resource "aws_security_group" "default" {
-  name        = "tf_sg"
+  name        = "terraform_sg"
   vpc_id = "${aws_vpc.main.id}"
-  description = "Used in the terraform"
+  description = "Security Group used for terraform."
 
   # SSH access from anywhere
   ingress {

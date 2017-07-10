@@ -18,6 +18,7 @@ resource "aws_instance" "webpage_infra" {
   key_name        = "${var.ssh_key_name}"
   user_data       = "${file("scripts/init.sh")}"
   subnet_id       = "${aws_subnet.main.0.id}"
+  associate_public_ip_address = true
   provisioner "local-exec" {
     command = "echo ${timestamp()}"
   }
