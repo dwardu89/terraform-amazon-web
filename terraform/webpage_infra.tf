@@ -1,5 +1,3 @@
-
-
 data "aws_ami" "awslinux" {
   most_recent = true
 
@@ -10,7 +8,6 @@ data "aws_ami" "awslinux" {
 
   owners = ["137112412989"] # Canonical
 }
-
 
 resource "aws_instance" "webpage_infra" {
   ami             = "${data.aws_ami.awslinux.id}"
