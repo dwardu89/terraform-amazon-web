@@ -13,52 +13,29 @@ data "aws_ami" "awslinux" {
 
 
 resource "aws_instance" "webpage_infra" {
-  ami           = "${data.aws_ami.awslinux.id}"
-  instance_type = "t2.micro"
-  key_name      = "${var.ssh_key_name}"
-  security_groups = ["web-dmz"]
-
-
+  ami             = "${data.aws_ami.awslinux.id}"
+  instance_type   = "t2.micro"
+  key_name        = "${var.ssh_key_name}"
+  user_data       = "${file("scripts/init.sh")}"
+  subnet_id       = "${aws_subnet.main.0.id}"
   provisioner "local-exec" {
-    command = "echo ${aws_instance.webpage_infra.public_ip} > ip_address.txt"
+    command = "echo ${timestamp()}"
   }
 
   tags {
    Name = "MyWebServer"
  }
-
-  provisioner "file" {
-    source      = "scripts/init.sh"
-    destination = "/tmp/init.sh"
-
-    connection {
-      type     = "ssh"
-      port     = "22"
-      user     = "ec2-user"
-      private_key = "${file(var.ssh_key_path)}"
-    }
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/init.sh",
-      "/tmp/init.sh",
-    ]
-
-    connection {
-      type     = "ssh"
-      port     = "22"
-      user     = "ec2-user"
-      private_key = "${file(var.ssh_key_path)}"
-    }
-  }
 }
 
-resource "aws_eip" "ip" {
-  instance = "${aws_instance.webpage_infra.id}"
-  depends_on = ["aws_instance.webpage_infra"]
+resource "aws_ami_from_instance" "webpage_infra" {
+  name               = "terraform-webserver-${123}"
+  source_instance_id = "${aws_instance.webpage_infra.id}"
 }
 
-output "eip-address" {
-  value = "${aws_eip.ip.public_ip}"
+output "aws-ami-id" {
+  value = "AMI ID - ${aws_ami_from_instance.webpage_infra.id}"
+}
+
+output "aws-instance-id" {
+  value = "${aws_instance.webpage_infra.id}"
 }
