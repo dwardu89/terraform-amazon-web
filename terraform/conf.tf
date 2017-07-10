@@ -30,3 +30,15 @@ variable "az_count" {
   description = "Number of AZs to cover in a given AWS region"
   default     = "2"
 }
+
+variable "s3_bucket_name_website" {
+  description = "The S3 bucket to use."
+}
+
+data "template_file" "init" {
+  template = "${file("templates/init.sh")}"
+
+  vars {
+    bucket_name = "${var.s3_bucket_name_website}"
+  }
+}

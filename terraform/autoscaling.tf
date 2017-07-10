@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "as_conf" {
   instance_type = "t2.micro"
   depends_on = ["aws_ami_from_instance.webpage_infra"]
   key_name      = "${var.ssh_key_name}"
-  user_data       = "${file("scripts/init.sh")}"
+  user_data       = "${template_file.init.rendered}"
   # Security group
   security_groups = ["${aws_security_group.default.id}"]
 

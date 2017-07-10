@@ -16,7 +16,7 @@ resource "aws_instance" "webpage_infra" {
   ami             = "${data.aws_ami.awslinux.id}"
   instance_type   = "t2.micro"
   key_name        = "${var.ssh_key_name}"
-  user_data       = "${file("scripts/init.sh")}"
+  user_data       = "${template_file.init.rendered}"
   subnet_id       = "${aws_subnet.main.0.id}"
   associate_public_ip_address = true
   provisioner "local-exec" {
