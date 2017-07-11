@@ -9,7 +9,7 @@ chmod 2775 /var/www
 find /var/www -type d -exec chmod 2775 {} +
 find /var/www -type f -exec chmod 0664 {} +
 
-aws s3 sync s3://${bucket_name}/ /var/www/html/ --recursive
+aws s3 sync s3://${bucket_name}/ /var/www/html/ --region ${region}
 
 service httpd start
 chkconfig httpd on

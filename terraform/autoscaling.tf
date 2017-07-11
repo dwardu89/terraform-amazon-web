@@ -5,9 +5,10 @@ resource "aws_launch_configuration" "as_conf" {
   instance_type = "t2.micro"
   depends_on = ["aws_ami_from_instance.webpage_infra"]
   key_name      = "${var.ssh_key_name}"
-  user_data       = "${template_file.init.rendered}"
+  user_data       = "${data.template_file.init_shell.rendered}"
   # Security group
   security_groups = ["${aws_security_group.default.id}"]
+  iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
 
   associate_public_ip_address = true
 
@@ -43,6 +44,11 @@ name                 = "ws-as-group-${123}"
     },
   ]
 
+}
+
+resource "aws_alb_target_group_attachment" "original_web_infra" {
+  target_group_arn = "${aws_alb_target_group.albtf.arn}"
+  target_id        = "${aws_instance.webpage_infra.id}"
 }
 
 

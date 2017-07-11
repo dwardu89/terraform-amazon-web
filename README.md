@@ -1,4 +1,4 @@
-# Terraform Infrastructure
+# Terraform Infrastructure for AWS
 
 This script uses terraform to deploy an AWS infrastrucure that creates an
 AWS Instance, and creates an image out of it.
