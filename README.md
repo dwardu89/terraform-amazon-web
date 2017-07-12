@@ -18,5 +18,5 @@ terraform apply \
 -var ‘availability_zones=[{}] \
 -var ‘ssh_key_name={}’ \
 -var ‘domain_name={}’ \
--var ‘s3_bucket_name_website={}
+-var ‘s3_bucket_name_website={}‘
 ~~~~
